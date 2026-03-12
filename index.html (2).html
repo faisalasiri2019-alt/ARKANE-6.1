@@ -1,0 +1,1437 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>ARCANE AI — V6</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Orbitron:wght@700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090f; --surface:#0d1117; --s2:#111820; --s3:#161e28;
+  --border:rgba(0,212,255,0.11); --accent:#00d4ff; --gold:#f0a500;
+  --green:#22c55e; --red:#ef4444; --purple:#a855f7;
+  --text:#e2eaf4; --muted:#4a6070;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+body{background:var(--bg);color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;overflow-x:hidden;}
+.top-header{position:fixed;top:0;left:0;right:0;height:52px;background:rgba(7,9,15,.97);border-bottom:1px solid var(--border);backdrop-filter:blur(20px);z-index:100;display:flex;align-items:center;justify-content:space-between;padding:0 16px;}
+.logo{font-family:'Orbitron',monospace;font-size:13px;font-weight:900;color:var(--accent);letter-spacing:2px;}
+.ceo-pill{background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.3);border-radius:20px;padding:4px 12px;font-size:10px;color:var(--gold);font-family:'Space Mono',monospace;cursor:pointer;}
+.dot{width:7px;height:7px;background:var(--green);border-radius:50%;box-shadow:0 0 8px var(--green);animation:p 2s infinite;}
+@keyframes p{0%,100%{opacity:1}50%{opacity:.3}}
+.nav-bar{position:fixed;bottom:0;left:0;right:0;height:58px;background:rgba(7,9,15,.97);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;z-index:100;padding-bottom:env(safe-area-inset-bottom,0px);}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 8px;border:none;background:none;color:var(--muted);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:9px;border-radius:10px;}
+.nb .ni{font-size:17px;}
+.nb.active{color:var(--accent);}
+.sa{position:fixed;top:52px;bottom:58px;left:0;right:0;overflow-y:auto;overflow-x:hidden;}
+.sa::-webkit-scrollbar{width:2px;}
+.sa::-webkit-scrollbar-thumb{background:var(--border);}
+.page{display:none;padding:14px;padding-bottom:16px;}
+.page.active{display:block;}
+.sec{font-family:'Space Mono',monospace;font-size:9px;color:var(--accent);letter-spacing:2px;opacity:.6;margin-bottom:12px;}
+
+/* HOME */
+.hero{background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(168,85,247,.03));border:1px solid var(--border);border-radius:16px;padding:20px;text-align:center;margin-bottom:14px;}
+.hero h1{font-family:'Orbitron',monospace;font-size:20px;font-weight:900;color:var(--accent);letter-spacing:3px;}
+.hero p{font-size:10px;color:var(--muted);font-family:'Space Mono',monospace;margin-top:5px;}
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:14px;text-align:center;}
+.sn{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:var(--accent);}
+.sl{font-size:9px;color:var(--muted);margin-top:3px;}
+.ai{display:flex;align-items:center;gap:9px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.03);}
+.aico{width:30px;height:30px;background:var(--s2);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+.at{font-size:11px;font-weight:600;}
+.as{font-size:10px;color:var(--muted);}
+
+/* TEAM */
+.tier-hdr{display:flex;align-items:center;gap:9px;margin:16px 0 10px;}
+.tbadge{font-family:'Space Mono',monospace;font-size:8px;letter-spacing:2px;padding:3px 9px;border-radius:20px;flex-shrink:0;}
+.t-golden{background:rgba(240,165,0,.12);border:1px solid rgba(240,165,0,.4);color:var(--gold);}
+.t-elite{background:rgba(240,165,0,.07);border:1px solid rgba(240,165,0,.2);color:#c8960a;}
+.t-exec{background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.18);color:var(--accent);}
+.t-dev{background:rgba(34,197,94,.07);border:1px solid rgba(34,197,94,.18);color:var(--green);}
+.tline{flex:1;height:1px;background:var(--border);}
+.mc{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:13px;margin-bottom:9px;transition:border-color .2s;}
+.mc.golden{background:linear-gradient(135deg,rgba(240,165,0,.08),rgba(180,83,9,.04));border-color:rgba(240,165,0,.35);}
+.mc.elite-card{border-right:3px solid rgba(240,165,0,.5);}
+.mc.exec-card{border-right:3px solid rgba(0,212,255,.35);margin-right:14px;}
+.mtop{display:flex;align-items:center;gap:9px;margin-bottom:7px;}
+.mav{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;background:var(--s2);border:1px solid var(--border);}
+.mav.gav{background:rgba(240,165,0,.1);border-color:rgba(240,165,0,.4);}
+.mav.elav{background:rgba(240,165,0,.05);border-color:rgba(240,165,0,.15);}
+.mav.exav{background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.15);}
+.mn{font-size:12px;font-weight:700;}
+.mr{font-size:9px;color:var(--muted);margin-top:1px;}
+.mb{font-size:11px;color:var(--muted);line-height:1.6;margin-bottom:7px;}
+.mtags{display:flex;flex-wrap:wrap;gap:4px;}
+.tag{font-size:8px;padding:2px 6px;border-radius:4px;background:var(--s2);border:1px solid var(--border);color:var(--muted);font-family:'Space Mono',monospace;}
+.fbar{display:flex;gap:6px;overflow-x:auto;padding-bottom:5px;margin-bottom:12px;}
+.fbar::-webkit-scrollbar{display:none;}
+.fc{flex-shrink:0;padding:5px 11px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:9px;color:var(--muted);cursor:pointer;font-family:'Space Mono',monospace;}
+.fc.active{border-color:var(--accent);color:var(--accent);}
+
+/* DISCUSS */
+.psel{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:9px 12px;color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:12px;margin-bottom:10px;}
+.msgarea{margin-bottom:10px;}
+.msg{display:flex;gap:9px;margin-bottom:12px;animation:fi .3s ease;}
+.msg.user{flex-direction:row-reverse;}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.mav2{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;background:var(--s2);border:1px solid var(--border);}
+.mbody{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:0 11px 11px 11px;padding:9px 11px;font-size:12px;line-height:1.75;direction:rtl;}
+.msg.user .mbody{border-radius:11px 0 11px 11px;background:rgba(0,212,255,.05);border-color:rgba(0,212,255,.18);}
+.mfrom{font-size:9px;font-family:'Space Mono',monospace;color:var(--accent);margin-bottom:4px;opacity:.75;}
+.irow{display:flex;gap:7px;margin-bottom:10px;}
+.minput{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:10px 13px;color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;outline:none;resize:none;min-height:44px;max-height:110px;}
+.minput:focus{border-color:rgba(0,212,255,.35);}
+.sbtn{background:var(--accent);border:none;border-radius:11px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:#07090f;flex-shrink:0;}
+.td{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:tb .8s infinite;}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes tb{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.gstrip{height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);animation:gs 2s linear infinite;border-radius:1px;margin:4px 0;}
+@keyframes gs{0%{background-position:-200px 0}100%{background-position:200px 0}}
+
+/* IDEA STUDIO */
+.idea-studio{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;margin-bottom:13px;}
+.idea-studio h3{font-family:'Space Mono',monospace;font-size:10px;color:var(--accent);letter-spacing:1px;margin-bottom:10px;}
+.ita{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--text);font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;outline:none;resize:vertical;min-height:80px;direction:rtl;}
+.ita:focus{border-color:rgba(0,212,255,.35);}
+.btn{background:var(--accent);border:none;border-radius:10px;padding:11px 18px;color:#07090f;font-family:'IBM Plex Sans Arabic',sans-serif;font-size:13px;font-weight:700;cursor:pointer;width:100%;margin-top:9px;}
+.btn.gold{background:linear-gradient(135deg,var(--gold),#c8960a);color:#07090f;}
+.btn.ghost{background:transparent;border:1px solid var(--border);color:var(--text);}
+.btn.green{background:var(--green);color:#07090f;}
+.golden-btn-card{background:linear-gradient(135deg,rgba(240,165,0,.1),rgba(180,83,9,.05));border:1px solid rgba(240,165,0,.3);border-radius:13px;padding:14px;margin-bottom:13px;}
+.golden-btn-card button{width:100%;background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(180,83,9,.08));border:1px solid rgba(240,165,0,.4);border-radius:10px;padding:11px;font-size:12px;color:var(--gold);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;}
+
+/* VOTE RESULTS */
+.vote-bar{background:rgba(255,255,255,.04);border-radius:6px;height:7px;overflow:hidden;margin:8px 0;}
+.vote-fill{height:100%;border-radius:6px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+
+/* MINUTES */
+.min-area{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:14px;}
+.min-hdr{text-align:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;}
+.min-title{font-family:'Orbitron',monospace;font-size:13px;color:var(--accent);letter-spacing:2px;}
+.min-sec{margin-bottom:14px;}
+.min-sec-title{font-family:'Space Mono',monospace;font-size:9px;color:var(--gold);letter-spacing:1px;margin-bottom:7px;padding-right:8px;border-right:2px solid var(--gold);}
+.min-entry{background:var(--s2);border-radius:8px;padding:9px 11px;margin-bottom:6px;font-size:11px;line-height:1.75;direction:rtl;}
+.min-entry table{width:100%;border-collapse:collapse;font-size:11px;}
+.min-entry th{background:rgba(0,212,255,.08);color:var(--accent);padding:5px 8px;text-align:right;border:1px solid var(--border);}
+.min-entry td{padding:5px 8px;text-align:right;border:1px solid var(--border);}
+.min-entry tr:nth-child(even) td{background:rgba(255,255,255,.02);}
+.copy-btn{width:100%;margin-top:10px;background:var(--s2);border:1px solid var(--border);border-radius:9px;padding:9px;font-size:11px;color:var(--muted);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;}
+
+/* SETUP */
+#apiSetup{position:fixed;inset:0;background:var(--bg);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;}
+.setup-logo{font-family:'Orbitron',monospace;font-size:24px;font-weight:900;color:var(--accent);letter-spacing:4px;margin-bottom:8px;}
+.setup-sub{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;margin-bottom:32px;}
+.setup-input{width:100%;max-width:360px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:13px 16px;color:var(--text);font-family:'Space Mono',monospace;font-size:13px;outline:none;margin-bottom:12px;text-align:center;}
+.setup-input:focus{border-color:rgba(0,212,255,.4);}
+.setup-btn{width:100%;max-width:360px;background:var(--accent);border:none;border-radius:12px;padding:13px;font-size:14px;font-weight:700;color:#07090f;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;}
+
+/* TOAST */
+.toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--s3);border:1px solid var(--border);border-radius:10px;padding:9px 18px;font-size:12px;opacity:0;transition:all .3s;z-index:200;pointer-events:none;white-space:nowrap;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+
+<!-- SETUP -->
+<div id="apiSetup">
+  <div class="setup-logo">ARCANE AI</div>
+  <div class="setup-sub">INTERNAL PORTAL — V6</div>
+  <input class="setup-input" id="apiKeyInput" type="password" placeholder="أدخل Anthropic API Key" autocomplete="off">
+  <button class="setup-btn" onclick="saveApiKey()">دخول ←</button>
+</div>
+
+<!-- MAIN APP -->
+<div id="mainApp" style="display:none;">
+  <div class="top-header">
+    <div class="ceo-pill" onclick="changeKey()">👑 فيصل أركين</div>
+    <div class="logo">ARCANE AI</div>
+    <div class="dot"></div>
+  </div>
+
+  <div class="sa" id="sa">
+
+    <!-- HOME -->
+    <div class="page active" id="page-home">
+      <div class="hero">
+        <h1>ARCANE AI</h1>
+        <p>INTERNAL PORTAL — V6 · أبها، المملكة العربية السعودية</p>
+      </div>
+      <div class="sg">
+        <div class="sc"><div class="sn" id="sTeam">22</div><div class="sl">أعضاء الفريق</div></div>
+        <div class="sc"><div class="sn" id="sIdeas">0</div><div class="sl">أفكار مطروحة</div></div>
+        <div class="sc"><div class="sn" id="sApproved">0</div><div class="sl">أفكار مؤهلة</div></div>
+        <div class="sc"><div class="sn" id="sFiles">0</div><div class="sl">ملفات مشاريع</div></div>
+      </div>
+      <div class="sec">— آخر الأنشطة —</div>
+      <div id="actLog">
+        <div class="ai"><div class="aico">🚀</div><div><div class="at">البوابة جاهزة</div><div class="as">ARCANE AI Portal V6</div></div></div>
+      </div>
+      <button onclick="testConnection()" style="width:100%;margin-top:12px;background:rgba(0,212,255,.07);border:1px solid rgba(0,212,255,.2);border-radius:11px;padding:11px;font-size:12px;color:var(--accent);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;">🔗 اختبار الاتصال بـ API</button>
+      <div id="connResult" style="margin-top:8px;font-size:11px;display:none;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px;"></div>
+    </div>
+
+    <!-- TEAM -->
+    <div class="page" id="page-team">
+      <div class="fbar">
+        <div class="fc active" onclick="filterTeam('all',this)">الكل</div>
+        <div class="fc" onclick="filterTeam('elite',this)">النخبة</div>
+        <div class="fc" onclick="filterTeam('exec',this)">المنفذون</div>
+        <div class="fc" onclick="filterTeam('energy',this)">⚡ طاقة</div>
+        <div class="fc" onclick="filterTeam('health',this)">🏥 صحة</div>
+        <div class="fc" onclick="filterTeam('tech',this)">💻 تقنية</div>
+        <div class="fc" onclick="filterTeam('gov',this)">🏛️ حوكمة</div>
+        <div class="fc" onclick="filterTeam('finance',this)">💹 مالية</div>
+        <div class="fc" onclick="filterTeam('biz',this)">📡 أعمال</div>
+      </div>
+      <div id="teamBoard"></div>
+    </div>
+
+    <!-- DISCUSS -->
+    <div class="page" id="page-discuss">
+      <div class="sec">— النقاش الذكي —</div>
+      <select class="psel" id="topicType" onchange="onTopicChange()">
+        <option value="general">نقاش عام</option>
+        <option value="energy">⚡ مشروع طاقة</option>
+        <option value="health">🏥 مشروع صحي</option>
+        <option value="tech">💻 مشروع تقني</option>
+        <option value="gov">🏛️ مشروع حكومي</option>
+        <option value="finance">💹 استشارة مالية</option>
+        <option value="legal">⚖️ استشارة قانونية</option>
+        <option value="marketing">📡 تسويق وأعمال</option>
+      </select>
+      <div class="msgarea" id="msgArea">
+        <div class="msg">
+          <div class="mav2">🤖</div>
+          <div class="mbody"><div class="mfrom">النظام — ARCANE AI</div>مرحباً CEO فيصل. اختر مجال النقاش وابدأ — الفريق يرد بذكاء حقيقي.</div>
+        </div>
+      </div>
+      <div class="irow">
+        <textarea class="minput" id="msgInput" placeholder="اسأل الفريق..." rows="1" onkeydown="onKey(event)"></textarea>
+        <button class="sbtn" onclick="sendMsg()">↑</button>
+      </div>
+      <button class="minutes-btn" style="width:100%;background:linear-gradient(135deg,rgba(240,165,0,.1),rgba(180,83,9,.05));border:1px solid rgba(240,165,0,.3);border-radius:11px;padding:11px;font-size:12px;color:var(--gold);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;" onclick="compileMinutes()">📋 اجمع المحادثة في محضر رسمي</button>
+      <button style="width:100%;margin-top:8px;background:rgba(168,85,247,.08);border:1px solid rgba(168,85,247,.3);border-radius:11px;padding:11px;font-size:12px;color:#a855f7;cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;" onclick="generateThreeFiles()">🗂️ أنتج 3 ملفات احترافية من المحضر</button>
+      <button style="width:100%;margin-top:8px;background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.25);border-radius:11px;padding:11px;font-size:12px;color:var(--accent);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;" onclick="directionAdviceFromDiscuss()">🧭 من أتوجه له بهذا المشروع؟</button>
+    </div>
+
+    <!-- IDEA STUDIO -->
+    <div class="page" id="page-idea">
+      <div class="sec">— استوديو الأفكار —</div>
+
+      <!-- Golden Boy — زرين -->
+      <div class="golden-btn-card">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px;">
+          <div style="width:36px;height:36px;background:rgba(240,165,0,.1);border:1px solid rgba(240,165,0,.4);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;">🔮</div>
+          <div><div style="font-size:12px;font-weight:700;color:var(--gold);">أركين — Golden Boy</div><div style="font-size:9px;color:var(--muted);">نائب CEO · Chief Innovation Officer</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <button onclick="goldenBoyIdea('hell')" style="background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(180,83,9,.08));border:1px solid rgba(240,165,0,.4);border-radius:10px;padding:11px 8px;font-size:11px;color:var(--gold);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;">🔥 فكرة جهنمية<br><span style="font-size:9px;opacity:.7;">ضخمة · حكومية · طموحة</span></button>
+          <button onclick="goldenBoyIdea('market')" style="background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(0,150,200,.05));border:1px solid rgba(0,212,255,.3);border-radius:10px;padding:11px 8px;font-size:11px;color:var(--accent);cursor:pointer;font-family:'IBM Plex Sans Arabic',sans-serif;font-weight:600;">💡 فكرة سوقية<br><span style="font-size:9px;opacity:.7;">قابلة للتطبيق · شركات · ربحية</span></button>
+        </div>
+      </div>
+
+      <!-- Manual Idea -->
+      <div class="idea-studio">
+        <h3>✍️ أو اكتب فكرتك مباشرة</h3>
+        <textarea class="ita" id="ideaInput" placeholder="اكتب فكرة مشروعك هنا بأي تفاصيل..." style="min-height:90px;"></textarea>
+        <button class="btn" onclick="submitIdea()">🗳️ طرح على مجلس النخبة للتصويت</button>
+      </div>
+
+      <!-- Upload existing project file -->
+      <div class="idea-studio" style="border-color:rgba(168,85,247,.3);">
+        <h3>📂 ارفع ملف مشروع موجود</h3>
+        <label style="display:block;background:var(--s2);border:1px dashed rgba(168,85,247,.4);border-radius:9px;padding:12px;text-align:center;font-size:11px;color:var(--muted);cursor:pointer;">
+          📎 اختر ملف نصي أو HTML
+          <input type="file" id="projFileInput" accept=".txt,.html,.md" style="display:none;" onchange="loadProjectFile(this)">
+        </label>
+        <div id="filePreview" style="display:none;background:var(--s3);border-radius:8px;padding:10px;font-size:10px;color:var(--muted);max-height:80px;overflow:hidden;margin-top:8px;"></div>
+        <button class="btn" style="margin-top:8px;background:rgba(168,85,247,.15);border:1px solid rgba(168,85,247,.4);color:#a855f7;" onclick="analyzeUploadedFile()">🔬 تحميل الملف للتحليل</button>
+      </div>
+
+      <!-- Results area -->
+      <div id="ideaResults"></div>
+    </div>
+
+    <!-- DIRECTION PAGE -->
+    <div class="page" id="page-direction">
+      <div class="sec">— مرشد التوجه والتواصل —</div>
+
+      <div style="background:linear-gradient(135deg,rgba(0,212,255,.07),rgba(168,85,247,.04));border:1px solid rgba(0,212,255,.2);border-radius:14px;padding:14px;margin-bottom:14px;">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+          <div style="width:40px;height:40px;background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.3);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;">🧭</div>
+          <div>
+            <div style="font-size:13px;font-weight:700;color:var(--accent);">أ. فارس المطيري</div>
+            <div style="font-size:10px;color:var(--muted);">Business Direction Advisor — مرشد التوجه</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);line-height:1.7;">يحلل مشروعك ويحدد: هل تتوجه للقطاع الخاص أم الحكومي، من تتصل به بالاسم، وما الإيميل الرسمي الصحيح — مرتبين حسب الأولوية.</div>
+      </div>
+
+      <div class="idea-studio">
+        <h3>📋 صف مشروعك أو فكرتك</h3>
+        <textarea class="ita" id="directionInput" placeholder="اكتب وصف مشروعك هنا — كلما كانت التفاصيل أكثر كان التوجيه أدق..." style="min-height:100px;"></textarea>
+        <button class="btn" onclick="runDirectionFromPage()">🧭 احصل على توجيه التواصل</button>
+      </div>
+
+      <div id="directionResults"></div>
+    </div>
+
+  </div><!-- end sa -->
+
+  <div class="nav-bar">
+    <button class="nb active" onclick="showPage('home',this)"><span class="ni">⌂</span>الرئيسية</button>
+    <button class="nb" onclick="showPage('team',this)"><span class="ni">◈</span>الفريق</button>
+    <button class="nb" onclick="showPage('discuss',this)"><span class="ni">◎</span>نقاش</button>
+    <button class="nb" onclick="showPage('idea',this)"><span class="ni">✦</span>أفكار</button>
+    <button class="nb" onclick="showPage('direction',this)"><span class="ni">🧭</span>توجيه</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ════════════════════════════════════════════════════
+// API
+// ════════════════════════════════════════════════════
+var API_KEY = '';
+var ideasCount = 0, approvedCount = 0, filesCount = 0;
+
+function saveApiKey(){
+  var k = document.getElementById('apiKeyInput').value.trim();
+  if(!k || !k.startsWith('sk-')){ showToast('⚠️ مفتاح غير صحيح'); return; }
+  API_KEY = k;
+  try{ localStorage.setItem('arc_v6_key', k); }catch(e){}
+  document.getElementById('apiSetup').style.display = 'none';
+  document.getElementById('mainApp').style.display = 'block';
+  renderTeam();
+}
+
+function loadKey(){
+  try{
+    var k = localStorage.getItem('arc_v6_key');
+    if(k && k.startsWith('sk-')){
+      API_KEY = k;
+      document.getElementById('apiSetup').style.display = 'none';
+      document.getElementById('mainApp').style.display = 'block';
+      renderTeam();
+    }
+  }catch(e){}
+}
+
+function changeKey(){
+  if(!confirm('تغيير API Key؟')) return;
+  try{ localStorage.removeItem('arc_v6_key'); }catch(e){}
+  API_KEY = '';
+  document.getElementById('mainApp').style.display = 'none';
+  document.getElementById('apiSetup').style.display = 'flex';
+  document.getElementById('apiKeyInput').value = '';
+}
+
+async function askClaude(system, user, maxTok){
+  maxTok = maxTok || 600;
+  if(!API_KEY){ return '⚠️ لا يوجد API Key — اضغط على اسمك في الأعلى لإدخاله'; }
+  var sys = ARCANE_BASE + '\n\n' + (system||'');
+  try{
+    var r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':API_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({ model:'claude-sonnet-4-20250514', max_tokens:maxTok, system:sys, messages:[{role:'user',content:user}] })
+    });
+    var d = await r.json();
+    if(!r.ok){
+      if(r.status===401) return '⚠️ المفتاح غير صحيح أو منتهي — اضغط على اسمك وأدخله مجدداً';
+      if(r.status===429) return '⚠️ تجاوزت الحد المسموح — انتظر دقيقة وأعد المحاولة';
+      if(r.status===400) return '⚠️ خطأ في الطلب: ' + (d.error?.message||'تحقق من صياغة الرسالة');
+      if(r.status===500) return '⚠️ خطأ في خادم Anthropic — أعد المحاولة بعد قليل';
+      return '⚠️ خطأ ' + r.status + ': ' + (d.error?.message||'غير معروف');
+    }
+    return d.content?.[0]?.text || '—';
+  }catch(e){
+    if(e.name==='TypeError' && e.message.includes('fetch'))
+      return '⚠️ فشل الاتصال — تأكد من الإنترنت ثم أعد المحاولة';
+    return '⚠️ خطأ: ' + e.message;
+  }
+}
+
+// ════════════════════════════════════════════════════
+// ARCANE BASE CONTEXT
+// ════════════════════════════════════════════════════
+var ARCANE_BASE = `أنت موظف في شركة ARCANE AI، مقرها أبها، المملكة العربية السعودية.
+المؤسس والرئيس التنفيذي: فيصل أركين — صيدلاني سريري ومطور ذكاء اصطناعي.
+نائب الرئيس للابتكار: أركين (Golden Boy) — مسؤول عن الأفكار الاستراتيجية الجهنمية.
+
+طبيعة الشركة: تطوير حلول AI في قطاعات الطاقة، الصحة، التقنية، والحوكمة — وأي قطاع تستهدفه أفكار القيادة.
+التوجه الاستراتيجي: رؤية 2030، السوق السعودي أولاً، قابلية التطبيق الفعلي، الحماية الفكرية.
+
+قواعد الرد:
+- تحليل مباشر من منظور تخصصك بدون مقدمات
+- لا تطلب معلومات إضافية إلا إذا كانت ضرورية جداً
+- محايد وموضوعي — تأييد ومعارضة مبنيان على البيانات لا الرأي
+- البيئة السعودية: القوانين، الأنظمة، الفرص، التحديات
+- الردود مركّزة لا تتجاوز 150 كلمة في النقاش العادي`;
+
+// ════════════════════════════════════════════════════
+// TEAM DATA
+// ════════════════════════════════════════════════════
+var TEAM = [
+
+  // ══ القيادة ══
+  { name:'أركين', role:'Golden Boy — نائب CEO', tier:'golden', sector:'all', av:'🔮', avClass:'gav',
+    bio:'Chief Innovation Officer. يصطاد أفكاراً لم يسبق تطبيقها، يتحقق من أصالتها، ويطرحها على المجلس.',
+    tags:['Innovation','Strategy','Disruption'],
+    system:`أنت أركين، نائب CEO ومسؤول الابتكار في ARCANE AI. لقبك "Golden Boy". وظيفتك الوحيدة: اصطياد أفكار مشاريع جهنمية غير مسبوقة في السوق السعودي. كل فكرة تطرحها يجب أن تكون: قابلة للتطبيق فعلياً، مناسبة للبيئة السعودية، لم تُنفَّذ بهذا الشكل محلياً. اذكر اسم الفكرة، المشكلة التي تحلها، ولماذا الآن فرصة ذهبية. 4-5 جمل فقط.`
+  },
+
+  // ══ النخبة — مستشارون فذّون ══
+  { name:'د. خالد السيف', role:'Chief Technology Advisor', tier:'elite', sector:'tech', av:'🔬', avClass:'elav',
+    bio:'مستشار تقني أول — 20 عاماً في هندسة الأنظمة المعقدة وبنى AI. عمل في Aramco Digital و KAUST.',
+    tags:['AI Architecture','Systems','R&D'],
+    system:`أنت د. خالد السيف، مستشار تقني أول في ARCANE AI، خبرة 20 سنة في هندسة الأنظمة وAI في أرامكو وKAUST.
+أسلوبك: مباشر، تقني عميق، لا مجاملة.
+عند تقييم أي فكرة تقنية اذكر بالتفصيل:
+- Stack التقني المقترح بالأسماء الحقيقية (Python/FastAPI/PostgreSQL مثلاً)
+- البنية المعمارية (Microservices/Monolith/Edge)
+- أكبر 3 تحديات تقنية مع حل مقترح لكل منها
+- وقت التطوير: MVP في X أشهر، V1 كامل في Y أشهر
+- تكلفة الـ infrastructure السنوية تقريباً
+- المخاطر التقنية التي قد تقتل المشروع
+ردودك دائماً بأرقام وأسماء تقنية حقيقية، لا عموميات.`
+  },
+  { name:'د. سارة الغامدي', role:'Chief Financial Advisor', tier:'elite', sector:'finance', av:'💹', avClass:'elav',
+    bio:'مستشارة مالية أولى — نماذج مالية لصناديق الاستثمار السعودية. خبرة في الـ VC والطروحات.',
+    tags:['Valuation','VC','Financial Models'],
+    system:`أنت د. سارة الغامدي، مستشارة مالية أولى في ARCANE AI، عملت في صناديق VC سعودية وأشرفت على نماذج مالية لمشاريع تقنية.
+أسلوبك: أرقام دقيقة، محايدة، مبنية على السوق السعودي.
+عند تقييم أي فكرة ماليًا اذكر:
+- حجم السوق السعودي المستهدف (SAR أو USD مع المصدر التقريبي)
+- تكلفة بناء MVP: أقل تقدير / أعلى تقدير بالريال
+- نموذج الإيراد المقترح (SaaS/License/Revenue Share) مع أسعار مقترحة
+- توقع الإيرادات: السنة 1 / السنة 2 / السنة 3 بأرقام محافظة
+- نقطة التعادل: متى وكيف
+- خيارات التمويل في السعودية: SVC، Monsha'at، منح Aramco، أو Angel
+- سيناريو الخروج: استحواذ أو IPO أو ترخيص
+لا تعطي أرقاماً خيالية — استند للسوق الفعلي.`
+  },
+  { name:'أ. نواف العتيبي', role:'Chief Marketing Advisor', tier:'elite', sector:'biz', av:'📡', avClass:'elav',
+    bio:'مستشار تسويق أول — بنى علامات تجارية B2B في السوق الخليجي. خبير GTM للسوق السعودي.',
+    tags:['GTM','B2B','Brand Strategy'],
+    system:`أنت أ. نواف العتيبي، مستشار تسويق أول في ARCANE AI، بنيت علامات B2B تقنية في السوق الخليجي.
+أسلوبك: استراتيجي، مبني على بيانات السوق، صريح.
+عند تقييم أي فكرة تسويقياً اذكر:
+- الـ ICP (Ideal Customer Profile): من هو العميل المثالي بالتفصيل
+- حجم السوق القابل للوصول فعلياً (SAM) في السعودية
+- المنافسون الحقيقيون في السوق المحلي والإقليمي بأسمائهم
+- استراتيجية الدخول الأولى: ماذا تبيع، لمن، وكيف تصل إليه
+- قناة الاكتساب الأرخص والأسرع للسوق السعودي
+- الرسالة التسويقية المقترحة (3 كلمات تلخص القيمة)
+- التحديات التسويقية الحقيقية في البيئة السعودية
+لا تعطي إجابات عامة — السوق السعودي له خصوصية.`
+  },
+  { name:'أ. منيرة الشهري', role:'Chief Legal Advisor', tier:'elite', sector:'gov', av:'⚖️', avClass:'elav',
+    bio:'مستشارة قانونية أولى — IP والعقود التجارية والأنظمة السعودية. خبرة في SAIP وهيئة الاتصالات.',
+    tags:['IP','Compliance','Saudi Law'],
+    system:`أنت أ. منيرة الشهري، مستشارة قانونية أولى في ARCANE AI، متخصصة في الأنظمة السعودية والملكية الفكرية.
+أسلوبك: دقيق قانونياً، عملي، يذكر الأنظمة بأسمائها.
+عند تقييم أي فكرة قانونياً اذكر:
+- التراخيص والتصاريح المطلوبة: الجهة، الاسم الرسمي، المدة التقريبية
+- الجهات التنظيمية المعنية (CITC، SFDA، SAMA، هيئة الاتصالات...إلخ)
+- كيفية حماية الملكية الفكرية: براءة اختراع أو سر تجاري أو علامة؟ عبر SAIP
+- التوافق مع نظام حماية البيانات الشخصية (PDPL)
+- المخاطر القانونية الخفية التي لا يتوقعها المؤسسون
+- هل يوجد نظام سعودي يمنع أو يقيد هذا النشاط؟
+- توافق الفكرة مع مبادرات رؤية 2030 (نعم/لا + السبب)
+أسماء الأنظمة والجهات الحقيقية دائماً.`
+  },
+  { name:'د. عمر السهلي', role:'Chief Energy Advisor', tier:'elite', sector:'energy', av:'⚡', avClass:'elav',
+    bio:'مستشار طاقة أول — 15 عاماً في ARAMCO وABB. خبير في أنظمة الطاقة الصناعية والهيدروجين.',
+    tags:['Energy','H2','Industrial AI'],
+    system:`أنت د. عمر السهلي، مستشار طاقة أول في ARCANE AI، عملت 15 سنة في أرامكو وABB على مشاريع طاقة صناعية.
+أسلوبك: ميداني، تقني عميق، يعرف تحديات البيئة السعودية الصناعية.
+عند تقييم أي فكرة في قطاع الطاقة اذكر:
+- التطبيق الميداني: هل يعمل فعلاً في البيئة السعودية (حرارة/رمال/بُعد)؟
+- المنافسون والحلول الموجودة: Emerson، Honeywell، ABB محلياً
+- متطلبات شهادة ATEX أو IECEx للبيئات الخطرة إن لزم
+- تكامل المشروع مع أنظمة SCADA وDCS الموجودة في أرامكو/ACWA
+- أكبر عائق للدخول: هل هو تقني أم تنظيمي أم علاقات؟
+- الميزانية التقديرية لـ Pilot في منشأة صناعية
+- فرص قطاع الهيدروجين والطاقة المتجددة ضمن NEOM وPIF
+بيانات ميدانية حقيقية، لا وصف نظري.`
+  },
+  { name:'د. رنا الزهراني', role:'Chief Medical Advisor', tier:'elite', sector:'health', av:'🏥', avClass:'elav',
+    bio:'مستشارة طبية أولى — طبيبة واستشارية تقنيات صحية. خبرة في SFDA والمعايير الطبية السعودية.',
+    tags:['MedTech','SFDA','Clinical AI'],
+    system:`أنت د. رنا الزهراني، مستشارة طبية أولى في ARCANE AI، طبيبة سريرية واستشارية MedTech.
+أسلوبك: سريري دقيق، يراعي الواقع التشغيلي في المنشآت الصحية.
+عند تقييم أي فكرة صحية اذكر:
+- الجدوى السريرية: هل يحل مشكلة حقيقية يعاني منها الأطباء أو المرضى؟
+- متطلبات SFDA للتسجيل: فئة الجهاز (Class I/II/III)، المستندات، المدة
+- التكامل مع أنظمة HIS/EMR السعودية (وزارة الصحة، HIS NCI)
+- الاعتبارات الأخلاقية والخصوصية حسب الأنظمة السعودية
+- نموذج الدخول: هل عبر وزارة الصحة أم المستشفيات الخاصة أم التأمين؟
+- أكبر خطر: الليابيلتي القانونية في حالة خطأ AI الطبي
+- مشاريع مشابهة في السعودية ونتائجها
+معلومات سريرية ونظامية دقيقة.`
+  },
+  { name:'أ. هدى العسيري', role:'Chief GovTech Advisor', tier:'elite', sector:'gov', av:'🏛️', avClass:'elav',
+    bio:'مستشارة حوكمة رقمية أولى — خبرة في التحول الرقمي الحكومي ومنصات رؤية 2030.',
+    tags:['GovTech','Vision2030','E-Gov'],
+    system:`أنت أ. هدى العسيري، مستشارة GovTech أولى في ARCANE AI، عملت على مشاريع التحول الرقمي مع جهات حكومية سعودية.
+أسلوبك: تعرف كيف تعمل المنظومة الحكومية السعودية من الداخل.
+عند تقييم أي فكرة حكومية اذكر:
+- هل توجد مبادرة حكومية موجودة تتقاطع معها؟ (اذكرها بالاسم)
+- الجهة الحكومية الأكثر استعداداً للشراء: الوزارة، الهيئة، الصندوق
+- آلية الدخول: مناقصة Etimad أم pilot مدفوع أم شراكة استراتيجية
+- متطلبات اللوائح الحكومية: نسبة Saudization، متطلبات الأمن السيبراني (NCA)
+- مدة دورة المبيعات الحكومية الواقعية في السعودية (6-18 شهر)
+- البوابات والمنصات الحكومية المناسبة: Etimad، منصة أعمال، Monsha'at
+- نصيحة: ما الذي يجعل الحكومة ترفض المشروع فوراً؟`
+  },
+
+  { name:'أ. فارس المطيري', role:'Business Direction Advisor', tier:'elite', sector:'biz', av:'🧭', avClass:'elav',
+    bio:'مستشار توجيه أعمال — يحدد أولوية التوجه (خاص/حكومي) ويقدم جهات تواصل حقيقية محددة في السوق السعودي.',
+    tags:['Outreach','Contacts','Strategy'],
+    system:`أنت أ. فارس المطيري، مستشار توجيه الأعمال في ARCANE AI. مهمتك الوحيدة عند تحليل أي مشروع:
+1. حدد الأولوية: القطاع الخاص أم الحكومي أم كلاهما — مع السبب
+2. اذكر 4-6 جهات مستهدفة محددة بالاسم (شركات أو جهات حكومية سعودية حقيقية)
+3. لكل جهة: اسم القسم المناسب، الإيميل الرسمي الحقيقي (ليس info@ أو contact@)، واسم شخص أو منصب مناسب إن أمكن
+4. رتبهم حسب الأولوية والسهولة
+كن محدداً ودقيقاً — جهات حقيقية فقط لا عامة.`
+  },
+  { name:'م. ماجد السلمي', role:'Senior Energy Engineer', tier:'exec', sector:'energy', av:'🔧', avClass:'exav',
+    bio:'مهندس طاقة أول — متخصص في المستشعرات الصناعية وأنظمة SCADA والـ IoT الصناعي.',
+    tags:['SCADA','IoT','ATEX'],
+    system:`أنت م. ماجد السلمي، مهندس طاقة أول في ARCANE AI، متخصص في SCADA وIoT الصناعي.
+ردودك تقنية تنفيذية بالتفصيل: اذكر الأجهزة بموديلاتها الحقيقية (Siemens S7، Allen Bradley، Yokogawa)، البروتوكولات (Modbus RTU/TCP، PROFINET، OPC-UA، DNP3)، ومتطلبات التركيب الفعلي في البيئة السعودية الصناعية. عند طلب خطوات تقنية، اذكرها بتسلسل رقمي مع الأوامر والأدوات الفعلية. لا إجابات عامة — أسماء حقيقية وموديلات حقيقية.`
+  },
+  { name:'م. لجين الزيد', role:'Biomedical Engineer', tier:'exec', sector:'health', av:'🧬', avClass:'exav',
+    bio:'مهندسة بيوطبية — متخصصة في أجهزة طبية ومعايير ISO 13485 وإجراءات SFDA.',
+    tags:['ISO13485','Medical Devices','Biomedical'],
+    system:`أنت م. لجين الزيد، مهندسة بيوطبية في ARCANE AI، متخصصة في تسجيل الأجهزة الطبية عبر SFDA.
+ردودك تقنية دقيقة: اذكري المعايير الدولية بأرقامها (ISO 13485:2016، IEC 62304، IEC 60601-1)، خطوات التسجيل في SFDA بالتسلسل، المستندات المطلوبة، والمدة الزمنية الواقعية. إذا طُلبت قائمة مستلزمات اذكريها بمواصفاتها الكاملة.`
+  },
+  { name:'م. تركي الحارثي', role:'Senior AI Engineer', tier:'exec', sector:'tech', av:'🧠', avClass:'exav',
+    bio:'مهندس AI أول — بناء نماذج ML ومعالجة اللغة الطبيعية وأنظمة الرؤية الحاسوبية.',
+    tags:['ML','NLP','Computer Vision'],
+    system:`أنت م. تركي الحارثي، مهندس AI أول في ARCANE AI.
+ردودك تقنية AI عميقة بالتفصيل: اذكر النماذج بأسمائها (YOLOv8، BERT-Arabic، LLaMA-3، Whisper-large-v3)، الـ frameworks (PyTorch 2.x، HuggingFace Transformers، LangChain)، بنية الـ pipeline بالتفصيل، متطلبات GPU/RAM، حجم البيانات المطلوب للتدريب. عند طلب كود اكتبه كاملاً قابلاً للتشغيل مع requirements.txt.`
+  },
+  { name:'م. زياد الشمري', role:'Senior Code Engineer', tier:'exec', sector:'tech', av:'💻', avClass:'exav',
+    bio:'مهندس برمجيات أول — كود نظيف وقابل للتوسع. Full Stack مع خبرة في APIs والأنظمة السحابية.',
+    tags:['Full Stack','APIs','Cloud'],
+    system:`أنت م. زياد الشمري، مهندس برمجيات أول في ARCANE AI.
+عندما يُطلب منك كود، اكتبه كاملاً مباشرةً — لا تصف فقط. Stack: Python/FastAPI للـ backend، React/Next.js للـ frontend، PostgreSQL/Redis للبيانات، Docker للـ deployment. اذكر الأوامر الفعلية (pip install، docker-compose up، إلخ). الكود نظيف مع تعليقات عربية. عند الإجابة على أسئلة تقنية اذكر الحل بكود مباشر لا شرح نظري.`
+  },
+  { name:'م. وليد المالكي', role:'Systems Architect', tier:'exec', sector:'tech', av:'🏗️', avClass:'exav',
+    bio:'مهندس معمارية أنظمة — تصميم البنى التحتية السحابية والـ Microservices والأمن السيبراني.',
+    tags:['AWS','Microservices','Security'],
+    system:`أنت م. وليد المالكي، مهندس معمارية أنظمة في ARCANE AI.
+ردودك معمارية تفصيلية: ارسم البنية نصياً (API Gateway → Service A → DB)، اذكر AWS/GCP services بأسمائها (ECS، RDS، ElastiCache، CloudFront)، متطلبات NCA للأمن السيبراني في السعودية (ECC-1، CCC)، وتكاليف الـ infrastructure الشهرية التقريبية بالريال. كل قرار معماري مع مبرره ومع البديل.`
+  },
+  { name:'م. لمى الحربي', role:'Prompt Engineer', tier:'exec', sector:'tech', av:'⚡', avClass:'exav',
+    bio:'مهندسة Prompt متخصصة — تحسين أداء نماذج AI وبناء أنظمة prompts فعالة.',
+    tags:['Prompt Engineering','LLM','AI Optimization'],
+    system:`أنت م. لمى الحربي، مهندسة Prompt في ARCANE AI.
+عند طلب تحسين prompt، قدّمي النسخة المحسّنة كاملةً مباشرةً مع شرح كل تغيير. استخدمي تقنيات: Chain-of-Thought، Few-shot examples، Role prompting، Structured output، Constitutional AI. قيّمي جودة الـ prompt الحالي (1-10) مع نقاط تحسين محددة. أعطي أمثلة مقارنة: قبل/بعد.`
+  },
+  { name:'أ. بندر الحربي', role:'Business Development Manager', tier:'exec', sector:'biz', av:'🤝', avClass:'exav',
+    bio:'مدير تطوير أعمال — شراكات استراتيجية، مناقصات حكومية وشركات، عقود B2B.',
+    tags:['BizDev','Tenders','Partnerships'],
+    system:`أنت أ. بندر الحربي، مدير تطوير أعمال في ARCANE AI.
+ردودك تنفيذية خطوة بخطوة: اذكر استراتيجية التواصل بالتفصيل، اكتب نص رسالة التقديم المقترحة جاهزة للإرسال، حدد الشخص المناسب للتواصل (CTO، Head of Innovation، VP Digital) وليس فقط اسم الشركة. اذكر مدة دورة البيع الواقعية لكل نوع عميل في السعودية.`
+  },
+  { name:'أ. سعود العتيبي', role:'Investor Relations Manager', tier:'exec', sector:'finance', av:'💎', avClass:'exav',
+    bio:'مدير علاقات المستثمرين — يستهدف PIF وSVC وAramco VC. خبير في إعداد ملفات الاستثمار.',
+    tags:['PIF','SVC','Investment'],
+    system:`أنت أ. سعود العتيبي، مدير علاقات المستثمرين في ARCANE AI.
+ردودك استثمارية متخصصة: اذكر المستثمرين بأسمائهم الحقيقية (SVC، Wa'ed Ventures، Sukna Ventures، Impact46، Nama Ventures، Riyadh Angels)، حجم التذكرة المناسب لكل منهم، ما يبحثون عنه فعلاً. اكتب Executive Summary جاهز بناءً على أي فكرة. حدد ما الذي يجعل المستثمر السعودي يرفض الصفقة فوراً.`
+  },
+  { name:'أ. ديمة القحطاني', role:'Product Manager', tier:'exec', sector:'biz', av:'🗺️', avClass:'exav',
+    bio:'مديرة منتجات — تحوّل الأفكار لـ Roadmap قابل للتنفيذ. خبرة في MVP وUser Stories.',
+    tags:['Roadmap','MVP','Agile'],
+    system:`أنت أ. ديمة القحطاني، مديرة منتجات في ARCANE AI.
+ردودك خطط تنفيذية مفصّلة: Roadmap بالأسابيع لا الأشهر، MVP بأضيق نطاق ممكن (ما الشيء الوحيد الذي يجب أن يعمل؟)، User Stories بصيغة "كـ [مستخدم]، أريد [وظيفة]، لأن [قيمة]". Priority matrix: P0 (يوقف الـ launch)، P1 (يجب في V1)، P2 (V2). ابدأي دائماً: ما أصغر شيء يمكن بيعه غداً؟`
+  },
+  { name:'أ. ريم الشمري', role:'Content & Presentations', tier:'exec', sector:'biz', av:'🎬', avClass:'exav',
+    bio:'متخصصة محتوى وعروض — سكريبتات احترافية وعروض مستثمرين وPitch Decks.',
+    tags:['Pitch Deck','Script','Presentations'],
+    system:`أنت أ. ريم الشمري، متخصصة محتوى وعروض في ARCANE AI.
+ردودك منتج جاهز كامل: عند طلب Pitch Deck اكتبي محتوى كل شريحة كاملاً بالنص والأرقام. عند طلب سكريبت اكتبيه بالزمن (00:00-00:30: نص التقديم...). تقنيات الإقناع: hook عاطفي → مشكلة بأرقام → حل واضح → proof → CTA محدد. لا نقاط مجردة — محتوى كامل قابل للاستخدام مباشرة.`
+  },
+  { name:'د. سلطان الدوسري', role:'Team Development Director', tier:'exec', sector:'all', av:'👥', avClass:'exav',
+    bio:'مدير تطوير الفريق — يُطوّر أداء الموظفين ويبني ثقافة مؤسسية قوية.',
+    tags:['HR','Performance','Culture'],
+    system:`أنت د. سلطان الدوسري، مدير تطوير الفريق في ARCANE AI.
+ردودك تطويرية عملية بخطوات: حدد فجوات الأداء بالاسم، اقترح برامج تدريبية حقيقية بأسمائها (AWS Certified، Google PM Certificate، Coursera AI courses)، ضع KPIs قابلة للقياس بأرقام. خطة العلاج: 30 يوم (فوري)، 60 يوم (تطوير)، 90 يوم (قياس). السبب الجذري أولاً ثم الحل.`
+  },
+];
+
+// ════════════════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════════════════
+function showPage(id, btn){
+  document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+  document.querySelectorAll('.nb').forEach(function(b){ b.classList.remove('active'); });
+  document.getElementById('page-'+id).classList.add('active');
+  if(btn) btn.classList.add('active');
+  document.getElementById('sa').scrollTop = 0;
+}
+
+// ════════════════════════════════════════════════════
+// TEAM RENDER
+// ════════════════════════════════════════════════════
+function renderTeam(){
+  var c = document.getElementById('teamBoard');
+  c.innerHTML = '';
+  document.getElementById('sTeam').textContent = TEAM.length;
+
+  // Golden Boy
+  addTierHeader(c, 'القيادة', 't-golden');
+  TEAM.filter(function(m){ return m.tier==='golden'; }).forEach(function(m){
+    var d = renderCard(m);
+    d.innerHTML += '<div style="margin-top:9px;"><button onclick="showPage(\'idea\',document.querySelectorAll(\'.nb\')[3])" style="width:100%;background:linear-gradient(135deg,rgba(240,165,0,.15),rgba(180,83,9,.08));border:1px solid rgba(240,165,0,.4);border-radius:9px;padding:9px;font-size:11px;color:var(--gold);cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;font-weight:600;">🔮 اطلب فكرة جهنمية</button></div>';
+    c.appendChild(d);
+  });
+
+  // Elite
+  addTierHeader(c, '★ النخبة — المستشارون الفذّون', 't-elite');
+  addTierDesc(c, 'مستشارون من الصف الأول في كل مجال — يُقيّمون ويوجّهون');
+  TEAM.filter(function(m){ return m.tier==='elite'; }).forEach(function(m){ c.appendChild(renderCard(m)); });
+
+  // Exec
+  addTierHeader(c, '◈ المنفذون — فريق التنفيذ', 't-exec');
+  addTierDesc(c, 'يُنفّذون بعد الضوء الأخضر من النخبة');
+  TEAM.filter(function(m){ return m.tier==='exec'; }).forEach(function(m){ c.appendChild(renderCard(m)); });
+}
+
+function addTierHeader(c, label, badgeClass){
+  var d = document.createElement('div');
+  d.className = 'tier-hdr';
+  d.innerHTML = '<div class="tbadge '+badgeClass+'">'+label+'</div><div class="tline"></div>';
+  c.appendChild(d);
+}
+
+function addTierDesc(c, text){
+  var d = document.createElement('div');
+  d.style.cssText = 'font-size:10px;color:var(--muted);margin-bottom:10px;padding-right:4px;';
+  d.textContent = text;
+  c.appendChild(d);
+}
+
+function renderCard(m){
+  var d = document.createElement('div');
+  d.className = 'mc' + (m.tier==='golden'?' golden':m.tier==='elite'?' elite-card':' exec-card');
+  d.dataset.tier = m.tier;
+  d.dataset.sector = m.sector;
+  d.innerHTML = '<div class="mtop"><div class="mav '+m.avClass+'">'+m.av+'</div><div><div class="mn">'+m.name+'</div><div class="mr">'+m.role+'</div></div></div>'
+    +'<div class="mb">'+m.bio+'</div>'
+    +'<div class="mtags">'+m.tags.map(function(t){ return '<span class="tag">'+t+'</span>'; }).join('')+'</div>';
+  return d;
+}
+
+function filterTeam(f, el){
+  document.querySelectorAll('.fc').forEach(function(c){ c.classList.remove('active'); });
+  el.classList.add('active');
+  document.querySelectorAll('#teamBoard .mc').forEach(function(card){
+    var show = f==='all' || card.dataset.tier===f || card.dataset.sector===f;
+    card.style.display = show ? '' : 'none';
+  });
+  document.querySelectorAll('#teamBoard .tier-hdr, #teamBoard div[style*="font-size:10px"]').forEach(function(el){ el.style.display=''; });
+}
+
+// ════════════════════════════════════════════════════
+// DISCUSS
+// ════════════════════════════════════════════════════
+function onTopicChange(){}
+
+function onKey(e){
+  if(e.key==='Enter' && !e.shiftKey){ e.preventDefault(); sendMsg(); }
+}
+
+function pickResponders(msg, topic){
+  var elite = TEAM.filter(function(m){ return m.tier==='elite'; });
+  var exec  = TEAM.filter(function(m){ return m.tier==='exec'; });
+  var find  = function(role){ return TEAM.find(function(m){ return m.role===role; }); };
+
+  if(topic==='energy')    return [find('Chief Energy Advisor'), find('Senior Energy Engineer')].filter(Boolean);
+  if(topic==='health')    return [find('Chief Medical Advisor'), find('Biomedical Engineer')].filter(Boolean);
+  if(topic==='finance')   return [find('Chief Financial Advisor'), find('Investor Relations Manager')].filter(Boolean);
+  if(topic==='legal')     return [find('Chief Legal Advisor'), find('Business Development Manager')].filter(Boolean);
+  if(topic==='gov')       return [find('Chief GovTech Advisor'), find('Chief Legal Advisor')].filter(Boolean);
+  if(topic==='marketing') return [find('Chief Marketing Advisor'), find('Business Development Manager')].filter(Boolean);
+
+  if(/كود|برمج|function|class|api/.test(msg))    return [find('Senior Code Engineer'), find('Chief Technology Advisor')].filter(Boolean);
+  if(/AI|نموذج|model|بيانات|data/.test(msg))     return [find('Senior AI Engineer'), find('Chief Technology Advisor')].filter(Boolean);
+  if(/مستثمر|تمويل|صندوق|VC/.test(msg))          return [find('Chief Financial Advisor'), find('Investor Relations Manager')].filter(Boolean);
+  if(/تسويق|عميل|سوق/.test(msg))                 return [find('Chief Marketing Advisor'), find('Business Development Manager')].filter(Boolean);
+  if(/roadmap|خارطة|MVP|منتج/.test(msg))          return [find('Product Manager'), find('Chief Technology Advisor')].filter(Boolean);
+  if(/طاقة|هيدروجين|صناعي|aramco/.test(msg))     return [find('Chief Energy Advisor'), find('Senior Energy Engineer')].filter(Boolean);
+  if(/طبي|صحة|مستشفى|SFDA/.test(msg))            return [find('Chief Medical Advisor'), find('Biomedical Engineer')].filter(Boolean);
+  if(/قانون|IP|براءة|نظام/.test(msg))             return [find('Chief Legal Advisor'), find('Chief GovTech Advisor')].filter(Boolean);
+
+  return [find('Chief Technology Advisor'), find('Chief Financial Advisor')].filter(Boolean);
+}
+
+async function sendMsg(){
+  var input = document.getElementById('msgInput');
+  var msg = input.value.trim();
+  if(!msg || !API_KEY){ if(!API_KEY) showToast('أدخل API Key أولاً'); return; }
+  input.value = '';
+  input.style.height = 'auto';
+
+  addMsg('👑','CEO فيصل أركين', msg, true);
+  var topic = document.getElementById('topicType').value;
+  var responders = pickResponders(msg, topic);
+
+  for(var i=0; i<responders.length; i++){
+    var m = responders[i];
+    if(i>0) hideTyping();
+    showTyping();
+    var reply = await askClaude(m.system, msg, 400);
+    hideTyping();
+    addMsg(m.av, m.name+' — '+m.role, reply);
+  }
+  addAct('💬','نقاش الفريق', msg.substring(0,35)+'...');
+}
+
+function showTyping(){
+  var a = document.getElementById('msgArea');
+  var t = document.createElement('div');
+  t.className='msg'; t.id='typing';
+  t.innerHTML='<div class="mav2">💭</div><div class="mbody"><div style="display:flex;gap:4px;align-items:center;padding:3px 0;"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>';
+  a.appendChild(t); a.scrollTop=a.scrollHeight;
+}
+function hideTyping(){ var t=document.getElementById('typing'); if(t)t.remove(); }
+
+function addMsg(av, from, text, isUser){
+  var a = document.getElementById('msgArea');
+  var d = document.createElement('div');
+  d.className = 'msg'+(isUser?' user':'');
+  d.innerHTML = '<div class="mav2">'+av+'</div><div class="mbody">'+(isUser?'':'<div class="mfrom">'+from+'</div>')+text.replace(/\n/g,'<br>')+'</div>';
+  a.appendChild(d); a.scrollTop=a.scrollHeight;
+}
+
+// ════════════════════════════════════════════════════
+// COMPILE MINUTES — نص نظيف بلا رموز
+// ════════════════════════════════════════════════════
+async function compileMinutes(){
+  var msgs = document.querySelectorAll('#msgArea .msg');
+  if(msgs.length < 2){ showToast('لا توجد محادثة بعد'); return; }
+
+  var raw = '';
+  msgs.forEach(function(m){
+    var from = m.querySelector('.mfrom');
+    var body = m.querySelector('.mbody');
+    if(body){
+      var who = from ? from.textContent : 'CEO فيصل أركين';
+      var text = body.innerText.replace(from ? from.innerText : '','').trim();
+      raw += who + ':\n' + text + '\n\n';
+    }
+  });
+
+  showToast('⏳ جاري إعداد المحضر...');
+  var system = `أنت سكرتيرة تنفيذية محترفة في ARCANE AI. مهمتك تحويل نص المحادثة إلى محضر رسمي منظّم.
+قواعد صارمة:
+- لا نجمات (**) لا هاشتاقات (#) لا رموز خاصة
+- العناوين بنص عادي مع سطر سفلي من الشرطات فقط
+- الجداول بخطوط عادية (|) إن وجدت
+- الاتجاه من اليمين لليسار
+- نص رسمي احترافي نظيف`;
+
+  var result = await askClaude(system,
+    'حوّل هذه المحادثة إلى محضر رسمي منظم:\n\n'+raw, 1200);
+
+  var r = document.createElement('div');
+  r.className='min-area';
+  r.innerHTML = '<div class="min-hdr"><div class="min-title">ARCANE AI</div><div style="font-size:10px;color:var(--muted);font-family:Space Mono,monospace;margin-top:4px;">محضر رسمي — '+new Date().toLocaleDateString('ar-SA')+'</div></div>'
+    +'<div class="min-entry" style="white-space:pre-wrap;font-size:11px;line-height:1.85;">'+result+'</div>'
+    +'<button class="copy-btn" onclick="copyMinutes(this)">📋 نسخ المحضر</button>';
+  document.getElementById('msgArea').after(r);
+  document.getElementById('sa').scrollTop = 9999;
+  addAct('📋','محضر رسمي','تم التجميع');
+}
+
+function copyMinutes(btn){
+  var text = btn.previousElementSibling.innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    showToast('✅ تم النسخ');
+  }).catch(function(){
+    var range = document.createRange();
+    range.selectNode(btn.previousElementSibling);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+    showToast('🖱️ تم التحديد — Ctrl+C للنسخ');
+  });
+}
+
+// ════════════════════════════════════════════════════
+// DIRECTION ADVISOR — مرشد التوجه
+// ════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════
+// REVIEW PROJECT — كشف النواقص والمخاطر
+// ════════════════════════════════════════════════════
+async function reviewProject(){
+  var idea = document.getElementById('ideaInput').value.trim();
+  if(!idea){ showToast('اكتب المشروع أولاً'); return; }
+
+  var res = document.getElementById('ideaResults');
+  var card = document.createElement('div');
+  card.className = 'mc elite-card';
+  card.style.borderColor = 'rgba(239,68,68,.4)';
+  card.innerHTML = '<div style="font-family:Space Mono,monospace;font-size:9px;color:#ef4444;letter-spacing:2px;margin-bottom:8px;">🔍 مراجعة المشروع — لجنة النخبة</div><div class="gstrip"></div>';
+  res.innerHTML = '';
+  res.appendChild(card);
+  document.getElementById('sa').scrollTop = 9999;
+
+  var reviewSystem = `أنت لجنة مراجعة خبراء في ARCANE AI. مهمتك تشريح المشروع المقدم وإظهار كل نقاط الضعف والفرص المفقودة.
+يجب أن يكون ردك في 4 أقسام واضحة بالضبط:
+
+القسم الأول — النواقص الحرجة:
+اذكر ما ينقص المشروع بالتفصيل (معلومات مفقودة، افتراضات غير مثبتة، عناصر لم تُذكر)
+
+القسم الثاني — المخاطر والمشاكل:
+اذكر كل مخاطر الفشل: تقنية، تجارية، تنظيمية، تشغيلية — بالتحديد لا بالعموم
+
+القسم الثالث — أوامر البحث للفريق التقني:
+اكتب 5-8 أوامر بحث محددة جاهزة للنسخ، مثال:
+"ابحث عن: [موضوع محدد] في السوق السعودي وأعطني أحدث الأرقام والمنافسين"
+"حدّد: متطلبات [تقنية محددة] وكيف تُطبّق في [سياق المشروع]"
+
+القسم الرابع — توصيات التحسين الفورية:
+ما الذي يجب تعديله أو إضافته قبل طرح المشروع على المستثمرين أو العملاء؟
+
+كن قاسياً وصريحاً — الهدف تحسين المشروع لا المجاملة.`;
+
+  var reply = await askClaude(reviewSystem,
+    'راجع هذا المشروع بالتفصيل:\n\n' + idea, 1000);
+
+  card.innerHTML = '<div style="font-family:Space Mono,monospace;font-size:9px;color:#ef4444;letter-spacing:2px;margin-bottom:10px;padding-right:8px;border-right:2px solid #ef4444;">🔍 تقرير المراجعة الشاملة</div>'
+    + '<div style="font-size:11px;line-height:1.9;white-space:pre-wrap;">' + reply + '</div>'
+    + '<button onclick="navigator.clipboard.writeText(this.previousElementSibling.innerText).then(()=>showToast(\'✅ تم نسخ التقرير\'))" style="width:100%;margin-top:10px;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:8px;font-size:11px;color:#ef4444;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">📋 نسخ التقرير كاملاً</button>';
+  document.getElementById('sa').scrollTop = 9999;
+  addAct('🔍','مراجعة مشروع','تم كشف النواقص والمخاطر');
+}
+
+// ════════════════════════════════════════════════════
+// GENERATE 3 FILES FROM IDEA PAGE
+// ════════════════════════════════════════════════════
+async function generateFromIdea(){
+  var idea = document.getElementById('ideaInput').value.trim();
+  if(!idea){ showToast('اكتب الفكرة أولاً في الحقل'); return; }
+  // Build a synthetic "raw" from the idea text
+  var syntheticRaw = 'CEO فيصل أركين: ' + idea + '\n\n';
+  showToast('⏳ يُنتج 3 ملفات...');
+  await generateThreeFilesFromText(syntheticRaw, idea.substring(0,40));
+}
+
+// ════════════════════════════════════════════════════
+// FILE UPLOAD — رفع ملف مشروع موجود
+// ════════════════════════════════════════════════════
+var uploadedFileContent = '';
+
+function loadProjectFile(input){
+  var file = input.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e){
+    uploadedFileContent = e.target.result;
+    var preview = document.getElementById('filePreview');
+    preview.style.display = 'block';
+    preview.textContent = file.name + ' — ' + uploadedFileContent.substring(0,150) + '...';
+    showToast('✅ تم رفع: ' + file.name);
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+async function analyzeUploadedFile(){
+  if(!uploadedFileContent){ showToast('ارفع ملفاً أولاً'); return; }
+  document.getElementById('ideaInput').value = uploadedFileContent.substring(0,1200);
+  showToast('✅ تم تحميل الملف في خانة الفكرة');
+  // Auto scroll to idea box
+  document.getElementById('ideaInput').scrollIntoView({behavior:'smooth', block:'center'});
+}
+
+async function directionAdvice(){
+  var idea = document.getElementById('ideaInput').value.trim();
+  if(!idea){ showToast('اكتب المشروع أولاً في الحقل'); return; }
+  await runDirectionAdvice(idea, document.getElementById('ideaResults'));
+}
+
+async function runDirectionFromPage(){
+  var text = document.getElementById('directionInput').value.trim();
+  if(!text){ showToast('اكتب وصف المشروع أولاً'); return; }
+  var res = document.getElementById('directionResults');
+  res.innerHTML = '';
+  await runDirectionAdvice(text, res);
+}
+
+async function directionAdviceFromDiscuss(){
+  var msgs = document.querySelectorAll('#msgArea .msg');
+  if(msgs.length < 2){ showToast('لا توجد محادثة بعد'); return; }
+  var raw = '';
+  msgs.forEach(function(m){
+    var body = m.querySelector('.mbody');
+    if(body) raw += body.innerText.trim() + '\n';
+  });
+  await runDirectionAdvice(raw.substring(0,800), document.getElementById('msgArea'));
+}
+
+async function runDirectionAdvice(projectText, targetEl){
+  var advisor = TEAM.find(function(m){ return m.role==='Business Direction Advisor'; });
+  if(!advisor){ showToast('⚠️ المستشار غير موجود'); return; }
+
+  var card = document.createElement('div');
+  card.className = 'mc elite-card';
+  card.style.borderColor = 'rgba(0,212,255,.4)';
+  card.innerHTML = '<div class="mtop"><div class="mav exav">🧭</div><div><div class="mn">أ. فارس المطيري</div><div class="mr">Business Direction Advisor</div></div></div><div class="gstrip"></div>';
+  targetEl.appendChild(card);
+  targetEl.scrollIntoView({block:'end'});
+
+  var reply = await askClaude(advisor.system,
+    'حلّل هذا المشروع وأعطني توجيه التواصل:\n\n' + projectText, 600);
+
+  card.innerHTML = '<div class="mtop"><div class="mav exav">🧭</div><div><div class="mn">أ. فارس المطيري</div><div class="mr">مرشد التوجه والتواصل</div></div></div>'
+    + '<div style="font-size:11px;line-height:1.85;margin-top:8px;">'
+    + reply.replace(/\n/g,'<br>').replace(/(\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z]{2,}\b)/gi,'<span style="color:var(--accent);font-family:Space Mono,monospace;font-size:10px;">$1</span>')
+    + '</div>';
+  document.getElementById('sa').scrollTop = 9999;
+  addAct('🧭','مرشد التوجه','جهات التواصل المحددة');
+}
+
+// ════════════════════════════════════════════════════
+// THREE FILES GENERATOR — 3 ملفات احترافية
+// ════════════════════════════════════════════════════
+async function generateThreeFiles(){
+  var msgs = document.querySelectorAll('#msgArea .msg');
+  if(msgs.length < 2){ showToast('لا توجد محادثة — ابدأ نقاشاً أولاً'); return; }
+  var raw = '';
+  msgs.forEach(function(m){
+    var from = m.querySelector('.mfrom');
+    var body = m.querySelector('.mbody');
+    if(body){
+      var who = from ? from.textContent : 'CEO';
+      raw += who + ': ' + body.innerText.replace(from?from.innerText:'','').trim() + '\n\n';
+    }
+  });
+  showToast('⏳ جاري إنتاج 3 ملفات...');
+  await generateThreeFilesFromText(raw, 'من النقاش');
+}
+
+async function generateThreeFilesFromText(raw, label){
+
+  var container = document.createElement('div');
+  container.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:15px;margin-top:12px;';
+  container.innerHTML = '<div style="font-family:Space Mono,monospace;font-size:9px;color:#a855f7;letter-spacing:2px;margin-bottom:12px;">🗂️ إنتاج 3 ملفات — ' + label + '</div>'
+    + '<div id="filesProgress" style="font-size:11px;color:var(--muted);line-height:2;">⏳ المنسق يحلل المشروع...</div>';
+
+  var ideaRes = document.getElementById('ideaResults');
+  if(ideaRes && document.getElementById('page-idea').classList.contains('active')){
+    ideaRes.appendChild(container);
+  } else {
+    document.getElementById('msgArea').after(container);
+  }
+  document.getElementById('sa').scrollTop = 9999;
+  var prog = document.getElementById('filesProgress');
+
+  // ── مرحلة 0: المنسق يستخلص كل بيانات المشروع أولاً ──
+  var fullCtx = raw.length > 7000 ? raw.substring(0,7000) : raw;
+
+  var summary = await askClaude(
+    `أنت محلل مشاريع خبير. استخرج كل المعلومات من النص وأعدها منظمة بدون حذف أي رقم أو تفصيل.`,
+    `استخرج من هذا النص كل معلومات المشروع منظمة:
+اسم المشروع، المشكلة والفرصة، الحل وكيف يعمل، أرقام السوق، النموذج المالي (كل الأرقام)، التقنيات، المخاطر، خارطة الطريق، أي معلومة أخرى.
+النص:\n${fullCtx}`, 2500);
+
+  prog.innerHTML = '✅ تم تحليل المشروع<br>⏳ الملف التنفيذي (1/3) — قد يستغرق دقيقة...';
+
+  // ── الملف الأول: التنفيذي ──
+  var f1 = await askClaude(
+    `أنت محرر وثائق تنفيذية خبير في ARCANE AI. تنتج HTML احترافياً 100%.
+قواعد لا تُخالَف أبداً:
+• HTML كامل يبدأ بـ <!DOCTYPE html> وينتهي بـ </html>
+• <style> داخلي كامل — لا ملفات خارجية
+• كل العناصر direction:rtl وtext-align:right
+• لا نجمات ** لا هاشتاقات # — HTML فقط
+• ألوان: body{background:#07090f;color:#e2eaf4} accent:#00d4ff gold:#f0a500 surface:#0d1117
+• جداول HTML جميلة للأرقام — ليس قوائم نقطية
+• 3 رسوم SVG مدمجة مباشرة في HTML:
+  SVG1 — مخطط تدفق الحل (flow chart بمربعات وأسهم ملونة)
+  SVG2 — رسم بياني شريطي للسوق بالأرقام الحقيقية من المشروع
+  SVG3 — خارطة طريق timeline أفقية بمراحل وتواريخ
+• padding وmargin مريحة — لا نص متلاصق
+• اسم الشركة ARCANE AI في الرأس بخط Orbitron`,
+    `أنتج ملفاً تنفيذياً HTML احترافياً كاملاً يشمل هذه الأقسام بالترتيب:
+① رأس فاخر: ARCANE AI + اسم المشروع + التاريخ + خط فاصل ذهبي
+② ملخص تنفيذي: فقرة واحدة مقنعة تشرح المشكلة والحل والفرصة
+③ المشكلة والحل: جدولان متجاوران (مشكلة يسار | حل يمين) بتفاصيل كاملة
+④ SVG1 — مخطط بنية الحل التقني
+⑤ حجم السوق: جدول HTML بكل الأرقام (TAM/SAM/SOM/عدد المباني)
+⑥ SVG2 — رسم بياني شريطي للسوق
+⑦ النموذج المالي: جدول HTML كامل السنة 1/2/3 مع الإيرادات والتكاليف والأرباح وROI
+⑧ المزايا التنافسية: جدول مقارنة مع المنافسين
+⑨ SVG3 — خارطة طريق timeline
+⑩ المخاطر الرئيسية وخطط التخفيف: جدول HTML (المخاطر | الاحتمالية | التأثير | الحل)
+⑪ الخطوات التالية: 5 خطوات فورية مع المسؤول والمدة
+⑫ تذييل: ARCANE AI Internal Portal V6
+
+بيانات المشروع الكاملة:
+${summary}
+
+بيانات إضافية من النقاش:
+${fullCtx.substring(0,2500)}`, 8000);
+
+  prog.innerHTML = '✅ الملف التنفيذي جاهز<br>⏳ الملف التقني الهندسي (2/3)...';
+
+  // ── الملف الثاني: التقني ──
+  var f2 = await askClaude(
+    `أنت مهندس توثيق تقني خبير في ARCANE AI. تنتج HTML هندسياً احترافياً.
+قواعد: HTML كامل <!DOCTYPE html>، <style> داخلي، direction:rtl، ألوان ARCANE AI (#07090f/#00d4ff/#f0a500/#e2eaf4)، لا نجمات لا هاشتاقات، جداول HTML للمواصفات، خط monospace للكود.`,
+    `أنتج وثيقة تقنية هندسية HTML كاملة تشمل:
+① رأس: ARCANE AI Technical Document + اسم المشروع
+② البنية المعمارية: مخطط SVG أو ASCII مفصّل (طبقات النظام)
+③ Stack التقني: جدول HTML (التقنية | الإصدار | الغرض | البديل)
+④ قواعد البيانات: الجداول الرئيسية وعلاقاتها وحجم البيانات المتوقع
+⑤ APIs والتكاملات: جدول (API | المزود | الغرض | التوثيق)
+⑥ أجهزة IoT والمستشعرات: جدول (الجهاز | الموديل | البروتوكول | التكلفة)
+⑦ متطلبات الأمن السيبراني: NCA ECC، PDPL، التشفير
+⑧ خطوات التنفيذ: جدول أسبوعي (الأسبوع | المهمة | المسؤول | النتيجة)
+⑨ متطلبات الفريق التقني: الأدوار والعدد والراتب التقريبي
+⑩ تكاليف البنية التحتية: جدول شهري (الخدمة | المزود | التكلفة/شهر)
+⑪ خطة الاختبار والجودة: unit tests، integration tests، load testing
+
+بيانات المشروع:
+${summary}
+
+التفاصيل التقنية:
+${fullCtx.substring(0,2500)}`, 8000);
+
+  prog.innerHTML = '✅ الملف التقني جاهز<br>⏳ البريزنتيشن (3/3)...';
+
+  // ── الملف الثالث: البريزنتيشن ──
+  var f3 = await askClaude(
+    `أنت مصمم عروض تقديمية محترف في ARCANE AI. تنتج Pitch Deck HTML تفاعلي فاخر.
+قواعد: HTML كامل <!DOCTYPE html>، CSS وJS داخليين، direction:rtl، ألوان ARCANE AI، كل شريحة تملأ الشاشة، أزرار تنقل أنيقة.`,
+    `أنتج Pitch Deck HTML تفاعلي كامل بـ 10 شرائح:
+الشريحة 1 — الغلاف: اسم المشروع كبير + tagline مقنعة + ARCANE AI + تاريخ
+الشريحة 2 — المشكلة: رقم كبير بارز + 3 نقاط مشكلة + صورة SVG توضيحية
+الشريحة 3 — الحل: كيف يعمل في 3 خطوات + SVG توضيحي
+الشريحة 4 — السوق: TAM/SAM/SOM بأرقام + رسم SVG دائري
+الشريحة 5 — المنتج: الميزات الرئيسية + لقطة شاشة وهمية SVG
+الشريحة 6 — النموذج المالي: جدول السنة 1/2/3 + نقطة التعادل
+الشريحة 7 — المزايا التنافسية: مقارنة بالمنافسين في جدول
+الشريحة 8 — خارطة الطريق: timeline SVG بالمراحل
+الشريحة 9 — الفريق: ARCANE AI + الخبرات
+الشريحة 10 — الاستثمار والـ CTA: المطلوب + العائد + زر تواصل
+
+JavaScript: أزرار السابق/التالي + عداد الشرائح (1/10) + keyboard navigation
+CSS: تصميم فاخر، أرقام ضخمة بارزة، gradient خلفيات
+
+بيانات المشروع:
+${summary}`, 8000);
+
+  prog.remove();
+
+  var date = new Date().toLocaleDateString('ar-SA').replace(/\//g,'-');
+  container.innerHTML += renderFileCard('📄 الملف التنفيذي','الملخص + السوق + المالية + SVGs + المخاطر','#00d4ff', f1, 'executive-'+date+'.html')
+    + renderFileCard('🔧 الملف التقني الهندسي','البنية + Stack + IoT + الأمن + خطة التنفيذ','#f0a500', f2, 'technical-'+date+'.html')
+    + renderFileCard('🎯 البريزنتيشن','Pitch Deck 10 شرائح تفاعلية للمستثمرين','#a855f7', f3, 'pitch-'+date+'.html');
+
+  document.getElementById('sa').scrollTop = 9999;
+  addAct('🗂️','3 ملفات احترافية','تم الإنتاج — ' + label);
+  filesCount++;
+  updateStats();
+}
+
+function renderFileCard(title, subtitle, color, content, filename){
+  var encoded = encodeURIComponent(content);
+  return '<div style="background:var(--s2);border:1px solid '+color.replace('#','rgba(')
+    .replace('00d4ff','0,212,255,.2)').replace('f0a500','240,165,0,.2)').replace('a855f7','168,85,247,.2)')
+    +';border-radius:11px;padding:12px;margin-top:10px;">'
+    +'<div style="color:'+color+';font-weight:700;font-size:12px;margin-bottom:3px;">'+title+'</div>'
+    +'<div style="color:var(--muted);font-size:10px;margin-bottom:10px;">'+subtitle+'</div>'
+    +'<div style="display:flex;gap:8px;">'
+    +'<button onclick="previewFile(this)" data-content="'+encoded+'" style="flex:1;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:8px;padding:8px;font-size:11px;color:var(--text);cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">👁️ معاينة</button>'
+    +'<button onclick="downloadFile(this)" data-content="'+encoded+'" data-name="'+filename+'" style="flex:1;background:'+color+';border:none;border-radius:8px;padding:8px;font-size:11px;color:#07090f;cursor:pointer;font-weight:700;font-family:\'IBM Plex Sans Arabic\',sans-serif;">⬇️ تنزيل</button>'
+    +'</div></div>';
+}
+
+function previewFile(btn){
+  var content = decodeURIComponent(btn.dataset.content);
+  var w = window.open('','_blank');
+  w.document.write(content);
+  w.document.close();
+}
+
+function downloadFile(btn){
+  var content = decodeURIComponent(btn.dataset.content);
+  var name = btn.dataset.name;
+  var blob = new Blob([content], {type:'text/html;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  a.click();
+  URL.revokeObjectURL(a.href);
+  showToast('✅ تم تنزيل '+name);
+}
+
+
+async function goldenBoyIdea(mode){
+  var golden = TEAM.find(function(m){ return m.tier==='golden'; });
+  var res = document.getElementById('ideaResults');
+  res.innerHTML = '<div class="mc elite-card" style="border-color:rgba(240,165,0,.3);"><div style="display:flex;align-items:center;gap:8px;"><span style="font-size:18px;">🔮</span><div style="font-size:12px;font-weight:700;color:var(--gold);">أركين — Golden Boy</div></div><div class="gstrip" style="margin:8px 0;"></div><div style="font-size:11px;color:var(--muted);">⏳ يفكر...</div></div>';
+  document.getElementById('sa').scrollTop = 9999;
+
+  var prompt = mode === 'hell'
+    ? 'أعطني فكرة مشروع جهنمية ضخمة واحدة لم تُطبَّق في السعودية والخليج. الفكرة طموحة، قد تستهدف الحكومة أو الطاقة أو البنية التحتية أو الصحة. اذكر: اسم الفكرة، المشكلة الكبيرة، الحل الجهنمي، الفرصة الاستراتيجية، لماذا الآن تحديداً. 5 جمل مقنعة بلا نجمات.'
+    : 'أعطني فكرة مشروع سوقية واحدة قابلة للتطبيق خلال 6-12 شهر، تستهدف الشركات المتوسطة والصغيرة أو الأفراد في السوق السعودي. الفكرة لم تُنفَّذ في الخليج بهذا الشكل أو مبتكرة من العدم، تحل مشكلة حقيقية يعاني منها السوق السعودي اليوم، وتكون ربحية من الشهر الأول. اذكر: اسم الفكرة، المشكلة، الحل، العميل المستهدف، نموذج الإيراد. 5 جمل مقنعة بلا نجمات.';
+
+  var reply = await askClaude(golden.system, prompt, 400);
+
+  var label = mode === 'hell' ? '🔥 فكرة جهنمية' : '💡 فكرة سوقية';
+  var color = mode === 'hell' ? 'rgba(240,165,0,.3)' : 'rgba(0,212,255,.3)';
+  var txtColor = mode === 'hell' ? 'var(--gold)' : 'var(--accent)';
+
+  res.innerHTML = '';
+  var d = document.createElement('div');
+  d.className = 'idea-studio';
+  d.style.borderColor = color;
+  var safeReply = reply.replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  d.innerHTML = '<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;"><span style="font-size:16px;">🔮</span><div style="font-size:12px;font-weight:700;color:'+txtColor+';">أركين — '+label+'</div></div>'
+    +'<div style="font-size:12px;line-height:1.9;margin-bottom:14px;">'+reply.replace(/\n/g,'<br>')+'</div>'
+    +'<button class="btn" style="background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.4);color:var(--green);" onclick="voteOnIdea(this.dataset.idea)" data-idea="'+safeReply+'">🗳️ طرح على مجلس النخبة للتصويت</button>';
+  res.appendChild(d);
+  ideasCount++; updateStats();
+  addAct('🔮','Golden Boy — '+label, reply.substring(0,40)+'...');
+}
+
+async function submitIdea(){
+  var idea = document.getElementById('ideaInput').value.trim();
+  if(!idea){ showToast('اكتب الفكرة أولاً'); return; }
+  ideasCount++; updateStats();
+  await voteOnIdea(idea);
+}
+
+// ════════════════════════════════════════════════════
+// VOTE PHASE 1 — تصويت النخبة
+// ════════════════════════════════════════════════════
+async function voteOnIdea(ideaOrEl){
+  var idea = (typeof ideaOrEl === 'string') ? ideaOrEl : ideaOrEl.dataset.idea;
+  var res = document.getElementById('ideaResults');
+  res.innerHTML = '';
+
+  var hdr = document.createElement('div');
+  hdr.className='idea-studio';
+  hdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--purple);letter-spacing:2px;margin-bottom:8px;">المرحلة الأولى — تصويت مجلس النخبة</div>'
+    +'<div style="font-size:11px;color:var(--muted);">الفكرة: <span style="color:var(--text);">'+idea.substring(0,100)+'...</span></div>'
+    +'<div class="gstrip" style="margin-top:8px;"></div>';
+  res.appendChild(hdr);
+  document.getElementById('sa').scrollTop = 9999;
+
+  var voters = TEAM.filter(function(m){ return m.tier==='elite'; });
+  var yes=0, no=0;
+  var votePrompt = `الفكرة المطروحة للتقييم:
+"${idea}"
+
+قيّم هذه الفكرة من منظور تخصصك الدقيق مع مراعاة البيئة السعودية ورؤية 2030.
+أجب بهذا الشكل الصارم فقط — 3 أسطر:
+الموقف: تأييد / معارضة
+السبب من منظور تخصصي: (جملة واحدة محددة بأرقام أو أسماء)
+نقطة المخاطرة الأكبر: (جملة واحدة)`;
+
+  for(var i=0; i<voters.length; i++){
+    var m = voters[i];
+    var loader = document.createElement('div');
+    loader.className='mc elite-card';
+    loader.innerHTML='<div class="mtop"><div class="mav elav">'+m.av+'</div><div><div class="mn">'+m.name+'</div><div class="mr">'+m.role+'</div></div></div><div class="gstrip"></div><div style="font-size:10px;color:var(--muted);">⏳</div>';
+    res.appendChild(loader);
+    document.getElementById('sa').scrollTop=9999;
+
+    var reply = await askClaude(m.system, votePrompt, 200);
+    var isYes = /تأييد/.test(reply) && !/معارضة/.test(reply.split('تأييد')[0]);
+    if(isYes) yes++; else no++;
+
+    loader.innerHTML='<div class="mtop"><div class="mav elav">'+m.av+'</div><div><div class="mn">'+m.name+'</div><div class="mr">'+m.role+'</div></div>'
+      +'<div style="margin-right:auto;background:'+(isYes?'rgba(34,197,94,.12)':'rgba(239,68,68,.12)')+';border:1px solid '+(isYes?'var(--green)':'var(--red)')+';border-radius:6px;padding:2px 9px;font-size:10px;color:'+(isYes?'var(--green)':'var(--red)')+';">'+(isYes?'✓ تأييد':'✗ معارضة')+'</div></div>'
+      +'<div style="font-size:11px;line-height:1.8;color:var(--muted);margin-top:6px;padding-top:6px;border-top:1px solid var(--border);">'+reply.replace(/\n/g,'<br>')+'</div>';
+  }
+
+  var total = yes+no;
+  var pct = Math.round(yes/total*100);
+  var pass = pct >= 65;
+  var rColor = pass ? 'var(--green)' : 'var(--red)';
+
+  var rDiv = document.createElement('div');
+  rDiv.className='idea-studio';
+  rDiv.style.borderColor = pass?'rgba(34,197,94,.4)':'rgba(239,68,68,.4)';
+  rDiv.innerHTML = '<div style="font-family:Space Mono,monospace;font-size:9px;color:'+rColor+';letter-spacing:2px;margin-bottom:10px;">نتيجة التصويت</div>'
+    +'<div style="display:flex;justify-content:space-between;margin-bottom:7px;">'
+    +'<span style="color:var(--green);font-weight:700;">✓ '+yes+' تأييد</span>'
+    +'<span style="color:var(--red);font-weight:700;">✗ '+no+' معارضة</span>'
+    +'</div>'
+    +'<div class="vote-bar"><div class="vote-fill" style="width:'+pct+'%;background:'+rColor+'"></div></div>'
+    +'<div style="text-align:center;font-family:Orbitron,monospace;font-size:18px;font-weight:900;color:'+rColor+';margin:8px 0;">'+pct+'%</div>'
+    +'<div style="text-align:center;font-size:10px;color:var(--muted);margin-bottom:12px;">'+(pass?'مؤهلة ✓ — المرحلة الأولى: بناء ملف المشروع':'لم تتجاوز 65% — أعد الصياغة')+'</div>';
+
+  if(pass){
+    approvedCount++; updateStats();
+    var safeIdea = idea.replace(/`/g,"'").replace(/"/g,'&quot;');
+    rDiv.innerHTML += '<button class="btn green" onclick="buildProjectFile(this.dataset.idea)" data-idea="'+safeIdea+'">🏗️ بناء ملف المشروع الكامل</button>';
+  } else {
+    rDiv.innerHTML += '<div style="background:rgba(239,68,68,.06);border:1px solid rgba(239,68,68,.2);border-radius:9px;padding:10px;font-size:11px;color:var(--muted);text-align:center;">أعد صياغة الفكرة مع معالجة النقاط المُثارة</div>';
+  }
+  res.appendChild(rDiv);
+  document.getElementById('sa').scrollTop=9999;
+  addAct('🗳️','تصويت النخبة',pct+'% تأييد');
+}
+
+// ════════════════════════════════════════════════════
+// PHASE 1B — بناء ملف المشروع الكامل
+// ════════════════════════════════════════════════════
+async function buildProjectFile(ideaOrEl){
+  var idea = (typeof ideaOrEl === 'string') ? ideaOrEl : ideaOrEl.dataset.idea;
+  var res = document.getElementById('ideaResults');
+
+  var hdr = document.createElement('div');
+  hdr.className='idea-studio';
+  hdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;">بناء ملف المشروع — كل عضو يُعدّ جزءه</div>'
+    +'<div class="gstrip" style="margin-top:8px;"></div>';
+  res.appendChild(hdr);
+
+  var sections = [
+    { role:'Golden Boy — نائب CEO', title:'ملخص الفكرة والفرصة الاستراتيجية',
+      prompt:'الفكرة: "'+idea+'"\nاكتب ملخصاً تنفيذياً: المشكلة بأرقام، الحل، الفرصة في السوق السعودي، لماذا الآن، لماذا ARCANE AI. نص نظيف بلا نجمات.' },
+    { role:'Chief Technology Advisor', title:'التقييم والمتطلبات التقنية الكاملة',
+      prompt:'الفكرة: "'+idea+'"\nاكتب تقييماً تقنياً مفصلاً: Stack التقني بالأسماء والإصدارات، البنية المعمارية، التحديات الثلاث الكبرى مع حل كل منها، وقت التطوير، تكلفة الـ infrastructure. نص نظيف.' },
+    { role:'Chief Financial Advisor', title:'النموذج المالي التفصيلي',
+      prompt:'الفكرة: "'+idea+'"\nاكتب نموذج مالي مفصل بالأرقام: تكلفة البناء (ريال)، نموذج الإيراد والأسعار، توقعات السنة 1/2/3، نقطة التعادل، خيارات التمويل السعودية. أرقام واقعية.' },
+    { role:'Chief Marketing Advisor', title:'استراتيجية دخول السوق',
+      prompt:'الفكرة: "'+idea+'"\nاكتب: ICP العميل المثالي، حجم السوق SAM، قناة الاكتساب الأولى، المنافسون بأسمائهم، الرسالة التسويقية، التحديات التسويقية في السعودية. نص نظيف.' },
+    { role:'Chief Legal Advisor', title:'الإطار القانوني والتنظيمي',
+      prompt:'الفكرة: "'+idea+'"\nاكتب: التراخيص المطلوبة مع الجهة والمدة، الجهات التنظيمية المعنية، حماية IP عبر SAIP، التوافق مع PDPL، المخاطر القانونية الخفية. نص نظيف.' },
+    { role:'Product Manager', title:'خارطة الطريق التنفيذية',
+      prompt:'الفكرة: "'+idea+'"\nاكتب Roadmap عملي: MVP (ماذا يشمل ومتى)، V1 الكامل، التوسع، الانتشار. User Stories الثلاثة الأهم. Priority P0/P1/P2. نص نظيف.' },
+    { role:'Investor Relations Manager', title:'ملف الاستثمار والتمويل',
+      prompt:'الفكرة: "'+idea+'"\nاكتب: لماذا تجذب المستثمرين السعوديين، أسماء المستثمرين المناسبين (SVC/Wa\'ed/Impact46...)، حجم الجولة، ما يجذب كل مستثمر وما يرفضه. نص نظيف.' },
+  ];
+
+  var fullText = 'ملف مشروع: '+idea.substring(0,60)+'\n';
+  fullText += 'التاريخ: '+new Date().toLocaleDateString('ar-SA')+'\n';
+  fullText += 'معدّ بواسطة: ARCANE AI Internal Portal V6\n';
+  fullText += '='.repeat(50)+'\n\n';
+
+  for(var k=0; k<sections.length; k++){
+    var sec = sections[k];
+    var member = TEAM.find(function(m){ return m.role===sec.role; });
+    if(!member) continue;
+
+    var card = document.createElement('div');
+    card.className='mc elite-card';
+    card.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--gold);letter-spacing:1px;margin-bottom:7px;padding-right:8px;border-right:2px solid var(--gold);">'+sec.title+'</div>'
+      +'<div class="gstrip"></div><div style="font-size:10px;color:var(--muted);margin-top:6px;">⏳ '+member.name+'...</div>';
+    res.appendChild(card);
+    document.getElementById('sa').scrollTop=9999;
+
+    var reply = await askClaude(member.system, sec.prompt, 500);
+    fullText += sec.title+'\n'+'-'.repeat(40)+'\n'+reply+'\n\n';
+
+    card.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--gold);letter-spacing:1px;margin-bottom:5px;padding-right:8px;border-right:2px solid var(--gold);">'+sec.title+'</div>'
+      +'<div style="font-size:10px;color:var(--muted);margin-bottom:7px;">'+member.name+' · '+member.role+'</div>'
+      +'<div style="font-size:11px;line-height:1.9;">'+reply.replace(/\n/g,'<br>')+'</div>';
+  }
+
+  // زر المخاطر والنواقص بعد اكتمال الملف
+  var safeIdea = idea.replace(/`/g,"'").replace(/"/g,'&quot;');
+  var safeText = encodeURIComponent(fullText);
+
+  var btns = document.createElement('div');
+  btns.className='idea-studio';
+  btns.style.borderColor='rgba(239,68,68,.4)';
+  btns.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--green);letter-spacing:2px;margin-bottom:10px;">✅ اكتمل ملف المشروع — الخطوة التالية</div>'
+    +'<button class="btn" style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:#ef4444;margin-bottom:8px;" onclick="reviewAndRevise(this.dataset.idea,this.dataset.text)" data-idea="'+safeIdea+'" data-text="'+safeText+'">🔍 كشف النواقص والمخاطر ثم إعادة الصياغة</button>'
+    +'<button class="btn" style="background:var(--s2);border:1px solid var(--border);color:var(--muted);" onclick="navigator.clipboard.writeText(decodeURIComponent(this.dataset.text)).then(()=>showToast(\'✅ تم النسخ\'))" data-text="'+safeText+'">📋 نسخ الملف الآن</button>';
+  res.appendChild(btns);
+  filesCount++; updateStats();
+  document.getElementById('sa').scrollTop=9999;
+  addAct('🏗️','ملف مشروع جديد','اكتمل — جاهز للمراجعة');
+}
+
+// ════════════════════════════════════════════════════
+// PHASE 2 — مخاطر + نواقص + إعادة صياغة + 3 ملفات
+// ════════════════════════════════════════════════════
+async function reviewAndRevise(idea, encodedText){
+  var projectText = decodeURIComponent(encodedText);
+  var res = document.getElementById('ideaResults');
+
+  // مرحلة المراجعة
+  var revHdr = document.createElement('div');
+  revHdr.className='idea-studio';
+  revHdr.style.borderColor='rgba(239,68,68,.4)';
+  revHdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:#ef4444;letter-spacing:2px;margin-bottom:8px;">المرحلة الثانية — تشريح المشروع</div>'
+    +'<div style="font-size:10px;color:var(--muted);">⏳ اللجنة تفحص النواقص والمخاطر...</div>';
+  res.appendChild(revHdr);
+  document.getElementById('sa').scrollTop=9999;
+
+  var reviewReply = await askClaude(
+    `أنت لجنة مراجعة متخصصة في ARCANE AI. مهمتك تشريح المشروع بقسوة ودقة.`,
+    `شرّح هذا المشروع في 4 أقسام واضحة:
+
+القسم الأول — النواقص الحرجة:
+ما ينقص المشروع من معلومات، افتراضات غير مثبتة، أرقام مفقودة (5-7 نقاط)
+
+القسم الثاني — المخاطر التي قد تقتل المشروع:
+تقنية + تجارية + تنظيمية + تشغيلية (مع تقييم الاحتمالية: عالي/متوسط/منخفض)
+
+القسم الثالث — أوامر بحث للفريق التقني (5-7 أوامر جاهزة للنسخ):
+صغ كل أمر هكذا: "ابحث عن: [موضوع محدد بالسوق السعودي]"
+
+القسم الرابع — قائمة التحسينات الإلزامية قبل التقديم للمستثمر:
+ما الذي يجب إضافته أو تعديله فوراً (5 نقاط)
+
+المشروع:
+${projectText.substring(0,3000)}`, 1500);
+
+  revHdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:#ef4444;letter-spacing:2px;margin-bottom:10px;padding-right:8px;border-right:2px solid #ef4444;">🔍 تقرير المراجعة الشاملة</div>'
+    +'<div style="font-size:11px;line-height:1.9;white-space:pre-wrap;">'+reviewReply+'</div>'
+    +'<button onclick="navigator.clipboard.writeText(this.previousElementSibling.innerText).then(()=>showToast(\'✅ نُسخ التقرير\'))" style="width:100%;margin-top:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);border-radius:8px;padding:8px;font-size:11px;color:#ef4444;cursor:pointer;font-family:\'IBM Plex Sans Arabic\',sans-serif;">📋 نسخ التقرير</button>';
+
+  // إعادة الصياغة
+  var rHdr = document.createElement('div');
+  rHdr.className='idea-studio';
+  rHdr.style.borderColor='rgba(0,212,255,.3)';
+  rHdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:8px;">⏳ إعادة صياغة المشروع بناءً على المراجعة...</div>';
+  res.appendChild(rHdr);
+  document.getElementById('sa').scrollTop=9999;
+
+  var revisedText = await askClaude(
+    `أنت كاتب وثائق مشاريع خبير. تعيد صياغة ملفات المشاريع بشكل احترافي محبوك بناءً على نقاط المراجعة. نص نظيف بلا نجمات بلا هاشتاقات.`,
+    `أعد صياغة ملف المشروع هذا بشكل محبوك كامل بناءً على نقاط المراجعة. أضف المعلومات الناقصة بأفضل تقدير ممكن، عالج المخاطر المذكورة، واجعل الملف جاهزاً للمستثمر.
+
+نقاط المراجعة:
+${reviewReply.substring(0,1200)}
+
+الملف الأصلي:
+${projectText.substring(0,2000)}
+
+أنتج ملف مشروع كامل منظم بأقسام واضحة، أرقام حقيقية، لا نجمات لا هاشتاقات.`, 3000);
+
+  var safeRevised = encodeURIComponent(revisedText);
+  var safeIdea2 = idea.replace(/`/g,"'").replace(/"/g,'&quot;');
+
+  rHdr.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--accent);letter-spacing:2px;margin-bottom:10px;padding-right:8px;border-right:2px solid var(--accent);">✅ الملف المُعاد صياغته</div>'
+    +'<div style="font-size:11px;line-height:1.9;white-space:pre-wrap;max-height:300px;overflow-y:auto;">'+revisedText+'</div>';
+
+  // الأزرار النهائية
+  var finalBtns = document.createElement('div');
+  finalBtns.className='idea-studio';
+  finalBtns.style.borderColor='rgba(240,165,0,.4)';
+  finalBtns.innerHTML='<div style="font-family:Space Mono,monospace;font-size:9px;color:var(--gold);letter-spacing:2px;margin-bottom:12px;">🏆 المشروع جاهز — الخطوات النهائية</div>'
+    +'<button class="btn gold" onclick="generateFinalFiles(this.dataset.text,this.dataset.idea)" data-text="'+safeRevised+'" data-idea="'+safeIdea2+'" style="margin-bottom:8px;">⚡ استخراج 3 ملفات احترافية نهائية</button>'
+    +'<button class="btn" style="background:rgba(0,212,255,.08);border:1px solid rgba(0,212,255,.3);color:var(--accent);margin-bottom:8px;" onclick="runDirectionAdvice(decodeURIComponent(this.dataset.idea), document.getElementById(\'ideaResults\'))" data-idea="'+encodeURIComponent(idea)+'">🧭 من أتوجه له بهذا المشروع؟</button>'
+    +'<button class="btn" style="background:var(--s2);border:1px solid var(--border);color:var(--muted);" onclick="navigator.clipboard.writeText(decodeURIComponent(this.dataset.text)).then(()=>showToast(\'✅ نُسخ الملف\'))" data-text="'+safeRevised+'">📋 نسخ الملف المُعاد صياغته</button>';
+  res.appendChild(finalBtns);
+  document.getElementById('sa').scrollTop=9999;
+  addAct('🔍','إعادة صياغة المشروع','اكتملت المرحلة الثانية');
+}
+
+async function generateFinalFiles(encodedText, idea){
+  var raw = decodeURIComponent(encodedText) + '\n\nالفكرة الأصلية: ' + idea;
+  await generateThreeFilesFromText(raw, idea.substring(0,35));
+}
+
+function copyFile(btn){
+  var text = decodeURIComponent(btn.dataset.text);
+  navigator.clipboard.writeText(text).then(function(){
+    showToast('✅ تم نسخ الملف كاملاً');
+  }).catch(function(){
+    showToast('⚠️ انسخ يدوياً');
+  });
+}
+
+// ════════════════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════════════════
+function updateStats(){
+  document.getElementById('sIdeas').textContent = ideasCount;
+  document.getElementById('sApproved').textContent = approvedCount;
+  document.getElementById('sFiles').textContent = filesCount;
+}
+
+async function testConnection(){
+  var box = document.getElementById('connResult');
+  box.style.display = 'block';
+  box.style.color = 'var(--muted)';
+  box.textContent = '⏳ جاري الاختبار...';
+
+  if(!API_KEY){
+    box.style.color = '#ef4444';
+    box.textContent = '❌ لا يوجد API Key مخزّن — اضغط على اسمك في الأعلى وأدخل المفتاح';
+    return;
+  }
+
+  box.textContent = '⏳ المفتاح موجود: ' + API_KEY.substring(0,12) + '... — يتصل بـ Anthropic...';
+
+  try{
+    var r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':API_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:20,messages:[{role:'user',content:'قل: OK'}]})
+    });
+    var d = await r.json();
+    if(r.ok){
+      box.style.color = 'var(--green)';
+      box.textContent = '✅ الاتصال ناجح — API يعمل بشكل صحيح';
+    } else if(r.status===401){
+      box.style.color = '#ef4444';
+      box.textContent = '❌ المفتاح غير صحيح أو منتهي — اذهب لـ console.anthropic.com واحصل على مفتاح جديد';
+    } else if(r.status===429){
+      box.style.color = '#f0a500';
+      box.textContent = '⚠️ تجاوزت الحد — المفتاح يعمل لكن استنفذت الرصيد مؤقتاً';
+    } else {
+      box.style.color = '#ef4444';
+      box.textContent = '❌ خطأ ' + r.status + ': ' + (d.error?.message||'');
+    }
+  }catch(e){
+    box.style.color = '#ef4444';
+    box.textContent = '❌ فشل الاتصال بالإنترنت: ' + e.message + ' — تأكد أن الجوال متصل بالنت';
+  }
+}
+
+function addAct(icon, title, sub){
+  var log = document.getElementById('actLog');
+  var d = document.createElement('div');
+  d.className='ai';
+  d.innerHTML='<div class="aico">'+icon+'</div><div><div class="at">'+title+'</div><div class="as">'+sub+'</div></div>';
+  log.insertBefore(d, log.firstChild);
+  if(log.children.length > 8) log.removeChild(log.lastChild);
+}
+
+function showToast(msg){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2500);
+}
+
+// Auto-resize textarea
+document.addEventListener('DOMContentLoaded', function(){
+  var ta = document.getElementById('msgInput');
+  if(ta) ta.addEventListener('input', function(){
+    this.style.height='auto';
+    this.style.height=Math.min(this.scrollHeight,110)+'px';
+  });
+  loadKey();
+});
+</script>
+</body>
+</html>
